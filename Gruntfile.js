@@ -94,6 +94,28 @@ module.exports = function(grunt) {
         },
         src: ['less/theme.less'],
         dest: 'dist/css/<%= pkg.name %>-theme.min.css'
+      },
+      rtl: {
+        src: ['less-rtl/bootstrap.less'],
+        dest: 'dist/css-rtl/<%= pkg.name %>.css'
+      },
+      rtl_min: {
+        options: {
+          compress: true
+        },
+        src: ['less-rtl/bootstrap.less'],
+        dest: 'dist/css-rtl/<%= pkg.name %>.min.css'
+      },
+      rtl_theme: {
+        src: ['less-rtl/theme.less'],
+        dest: 'dist/css-rtl/<%= pkg.name %>-theme.css'
+      },
+      rtl_theme_min: {
+        options: {
+          compress: true
+        },
+        src: ['less-rtl/theme.less'],
+        dest: 'dist/css-rtl/<%= pkg.name %>-theme.min.css'
       }
     },
 
