@@ -175,6 +175,28 @@ module.exports = function (grunt) {
         },
         src: 'less/theme.less',
         dest: 'dist/css/<%= pkg.name %>-theme.css'
+      },
+      compileCoreRtl: {
+    	  options: {
+    		  strictMath: true,
+    		  sourceMap: true,
+    		  outputSourceFiles: true,
+    		  sourceMapURL: '<%= pkg.name %>.css.map',
+    		  sourceMapFilename: 'dist/css-rtl/<%= pkg.name %>.css.map'
+    	  },
+    	  src: 'less-rtl/bootstrap.less',
+    	  dest: 'dist/css-rtl/<%= pkg.name %>.css'
+      },
+      compileThemeRtl: {
+    	  options: {
+    		  strictMath: true,
+    		  sourceMap: true,
+    		  outputSourceFiles: true,
+    		  sourceMapURL: '<%= pkg.name %>-theme.css.map',
+    		  sourceMapFilename: 'dist/css-rtl/<%= pkg.name %>-theme.css.map'
+    	  },
+    	  src: 'less-rtl/theme.less',
+    	  dest: 'dist/css-rtl/<%= pkg.name %>-theme.css'
       }
     },
 
@@ -193,6 +215,18 @@ module.exports = function (grunt) {
           map: true
         },
         src: 'dist/css/<%= pkg.name %>-theme.css'
+      },
+      coreRtl: {
+    	  options: {
+    		  map: true
+    	  },
+    	  src: 'dist/css-rtl/<%= pkg.name %>.css'
+      },
+      themeRtl: {
+    	  options: {
+    		  map: true
+    	  },
+    	  src: 'dist/css-rtl/<%= pkg.name %>-theme.css'
       },
       docs: {
         src: ['docs/assets/css/src/docs.css']
@@ -242,6 +276,14 @@ module.exports = function (grunt) {
         src: 'dist/css/<%= pkg.name %>-theme.css',
         dest: 'dist/css/<%= pkg.name %>-theme.min.css'
       },
+      minifyCoreRtl: {
+    	  src: 'dist/css-rtl/<%= pkg.name %>.css',
+    	  dest: 'dist/css-rtl/<%= pkg.name %>.min.css'
+      },
+      minifyThemeRtl: {
+    	  src: 'dist/css-rtl/<%= pkg.name %>-theme.css',
+    	  dest: 'dist/css-rtl/<%= pkg.name %>-theme.min.css'
+      },
       docs: {
         src: [
           'docs/assets/css/src/pygments-manni.css',
@@ -260,6 +302,12 @@ module.exports = function (grunt) {
         cwd: 'dist/css/',
         src: ['*.css', '!*.min.css'],
         dest: 'dist/css/'
+      },
+      distRtl: {
+    	  expand: true,
+    	  cwd: 'dist/css-rtl/',
+    	  src: ['*.css', '!*.min.css'],
+    	  dest: 'dist/css-rtl/'
       },
       examples: {
         expand: true,
@@ -475,8 +523,9 @@ module.exports = function (grunt) {
   grunt.registerTask('dist-js', ['concat', 'uglify:core', 'commonjs']);
 
   // CSS distribution task.
-  grunt.registerTask('less-compile', ['less:compileCore', 'less:compileTheme']);
-  grunt.registerTask('dist-css', ['less-compile', 'autoprefixer:core', 'autoprefixer:theme', 'csscomb:dist', 'cssmin:minifyCore', 'cssmin:minifyTheme']);
+  grunt.registerTask('less-compile', ['less:compileCore', 'less:compileTheme', 'less:compileCoreRtl', 'less:compileThemeRtl']);
+  grunt.registerTask('dist-css', ['less-compile', 'autoprefixer:core', 'autoprefixer:theme', 'csscomb:dist', 'cssmin:minifyCore', 'cssmin:minifyTheme',
+                                  				  'autoprefixer:coreRtl', 'autoprefixer:themeRtl', 'csscomb:distRtl', 'cssmin:minifyCoreRtl', 'cssmin:minifyThemeRtl']);
 
   // Full distribution task.
   grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
