@@ -248,28 +248,6 @@ module.exports = function (grunt) {
           'docs/assets/css/src/docs.css'
         ],
         dest: 'docs/assets/css/docs.min.css'
-      },
-      rtl: {
-    	  src: ['less-rtl/bootstrap.less'],
-    	  dest: 'dist/css-rtl/<%= pkg.name %>.css'
-      },
-      rtl_min: {
-    	  options: {
-    		  compress: true
-    	  },
-    	  src: ['less-rtl/bootstrap.less'],
-    	  dest: 'dist/css-rtl/<%= pkg.name %>.min.css'
-      },
-      rtl_theme: {
-    	  src: ['less-rtl/theme.less'],
-    	  dest: 'dist/css-rtl/<%= pkg.name %>-theme.css'
-      },
-      rtl_theme_min: {
-    	  options: {
-    		  compress: true
-    	  },
-    	  src: ['less-rtl/theme.less'],
-    	  dest: 'dist/css-rtl/<%= pkg.name %>-theme.min.css'
       }
     },
 
