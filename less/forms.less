@@ -228,7 +228,7 @@ input[type="search"] {
 
   label {
     min-height: @line-height-computed; // Ensure the input doesn't jump when there is no text
-    padding-right: 20px;
+    padding-left: 20px;
     margin-bottom: 0;
     font-weight: normal;
     cursor: pointer;
@@ -239,7 +239,7 @@ input[type="search"] {
 .checkbox input[type="checkbox"],
 .checkbox-inline input[type="checkbox"] {
   position: absolute;
-  margin-right: -20px;
+  margin-left: -20px;
   margin-top: 4px \9;
 }
 
@@ -253,7 +253,7 @@ input[type="search"] {
 .checkbox-inline {
   position: relative;
   display: inline-block;
-  padding-right: 20px;
+  padding-left: 20px;
   margin-bottom: 0;
   vertical-align: middle;
   font-weight: normal;
@@ -262,7 +262,7 @@ input[type="search"] {
 .radio-inline + .radio-inline,
 .checkbox-inline + .checkbox-inline {
   margin-top: 0;
-  margin-right: 10px; // space out consecutive inline controls
+  margin-left: 10px; // space out consecutive inline controls
 }
 
 // Apply same disabled cursor tweak as for inputs
@@ -357,7 +357,6 @@ input[type="checkbox"] {
 .input-lg {
   .input-size(@input-height-large; @padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @input-border-radius-large);
 }
-<<<<<<< Upstream, based on master
 .form-group-lg {
   .form-control {
     height: @input-height-large;
@@ -382,15 +381,12 @@ input[type="checkbox"] {
     line-height: @line-height-large;
   }
 }
-=======
->>>>>>> 7968d4f Added required changes in 'less' files and 'Gruntfile.js' for RTL bootstrap.
 
 
 // Form control feedback states
 //
 // Apply contextual and semantic states to individual form controls.
 
-<<<<<<< Upstream, based on master
 .has-feedback {
   // Enable absolute positioning
   position: relative;
@@ -432,39 +428,22 @@ input[type="checkbox"] {
 .has-success {
   .form-control-validation(@state-success-text; @state-success-text; @state-success-bg);
 }
-=======
-// Warning
->>>>>>> 7968d4f Added required changes in 'less' files and 'Gruntfile.js' for RTL bootstrap.
 .has-warning {
   .form-control-validation(@state-warning-text; @state-warning-text; @state-warning-bg);
 }
-// Error
 .has-error {
   .form-control-validation(@state-danger-text; @state-danger-text; @state-danger-bg);
 }
-// Success
-.has-success {
-  .form-control-validation(@state-success-text; @state-success-text; @state-success-bg);
-}
 
+// Reposition feedback icon if input has visible label above
+.has-feedback label {
 
-<<<<<<< Upstream, based on master
   & ~ .form-control-feedback {
     top: (@line-height-computed + 5); // Height of the `label` and its margin
   }
   &.sr-only ~ .form-control-feedback {
     top: 0;
   }
-=======
-// Static form control text
-//
-// Apply class to a `p` element to make any string of text align with labels in
-// a horizontal form layout.
-
-.form-control-static {
-  margin-bottom: 0; // Remove default margin from `p`
-  padding-top: (@padding-base-vertical + 1);
->>>>>>> 7968d4f Added required changes in 'less' files and 'Gruntfile.js' for RTL bootstrap.
 }
 
 
@@ -481,7 +460,6 @@ input[type="checkbox"] {
 }
 
 
-
 // Inline forms
 //
 // Make forms appear inline(-block) by adding the `.form-inline` class. Inline
@@ -496,9 +474,9 @@ input[type="checkbox"] {
 .form-inline {
 
   // Kick in the inline
-  @media (min-width: @screen-tablet) {
+  @media (min-width: @screen-sm-min) {
     // Inline-block all the things for "inline"
-    .form-group  {
+    .form-group {
       display: inline-block;
       margin-bottom: 0;
       vertical-align: middle;
@@ -507,22 +485,58 @@ input[type="checkbox"] {
     // In navbar-form, allow folks to *not* use `.form-group`
     .form-control {
       display: inline-block;
+      width: auto; // Prevent labels from stacking above inputs in `.form-group`
+      vertical-align: middle;
+    }
+
+    // Make static controls behave like regular ones
+    .form-control-static {
+      display: inline-block;
+    }
+
+    .input-group {
+      display: inline-table;
+      vertical-align: middle;
+
+      .input-group-addon,
+      .input-group-btn,
+      .form-control {
+        width: auto;
+      }
+    }
+
+    // Input groups need that 100% width though
+    .input-group > .form-control {
+      width: 100%;
+    }
+
+    .control-label {
+      margin-bottom: 0;
+      vertical-align: middle;
     }
 
     // Remove default margin on radios/checkboxes that were used for stacking, and
-    // then undo the floating of radios and checkboxes to match (which also avoids
-    // a bug in WebKit: https://github.com/twbs/bootstrap/issues/1969).
+    // then undo the floating of radios and checkboxes to match.
     .radio,
     .checkbox {
       display: inline-block;
       margin-top: 0;
       margin-bottom: 0;
-      padding-right: 0;
+      vertical-align: middle;
+
+      label {
+        padding-left: 0;
+      }
     }
     .radio input[type="radio"],
     .checkbox input[type="checkbox"] {
-      float: none;
-      margin-right: 0;
+      position: relative;
+      margin-left: 0;
+    }
+
+    // Re-override the feedback icon.
+    .has-feedback .form-control-feedback {
+      top: 0;
     }
   }
 }
@@ -535,8 +549,9 @@ input[type="checkbox"] {
 
 .form-horizontal {
 
-  // Consistent vertical alignment of labels, radios, and checkboxes
-  .control-label,
+  // Consistent vertical alignment of radios and checkboxes
+  //
+  // Labels also get some reset styles, but that is scoped to a media query below.
   .radio,
   .checkbox,
   .radio-inline,
@@ -545,16 +560,22 @@ input[type="checkbox"] {
     margin-bottom: 0;
     padding-top: (@padding-base-vertical + 1); // Default padding plus a border
   }
+  // Account for padding we're adding to ensure the alignment and of help text
+  // and other content below items
+  .radio,
+  .checkbox {
+    min-height: (@line-height-computed + (@padding-base-vertical + 1));
+  }
 
   // Make form groups behave like rows
   .form-group {
     .make-row();
   }
 
-  // Only right align form labels here when the columns stop stacking
-  @media (min-width: @screen-tablet) {
+  // Reset spacing and right align labels, but scope to media queries so that
+  // labels on narrow viewports stack the same as a default form example.
+  @media (min-width: @screen-sm-min) {
     .control-label {
-<<<<<<< Upstream, based on master
       text-align: right;
       margin-bottom: 0;
       padding-top: (@padding-base-vertical + 1); // Default padding plus a border
@@ -587,9 +608,6 @@ input[type="checkbox"] {
         padding-top: (@padding-small-vertical + 1);
         font-size: @font-size-small;
       }
-=======
-      text-align: left;
->>>>>>> 7968d4f Added required changes in 'less' files and 'Gruntfile.js' for RTL bootstrap.
     }
   }
 }
